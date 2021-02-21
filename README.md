@@ -1,6 +1,11 @@
 # Longship
 Longship aims to provide a simply-to-configure, optimizations, bugfixes and plugins system for Valheim servers !
 
+# BepInEx Port
+**NOTE: BepInEx is required for this branch**
+
+Make sure all BepInEx dlls are referenced before building, if you're unsure, just look at the references and find all the missing ones.
+
 # Features
 **Currently these features are in dev-phase, please do not use them if they are not marked as *TESTED***  
 * Fixed server-lag by upgrading the server bandwith limit through configuration - *TESTED*
@@ -17,21 +22,43 @@ Longship aims to provide a simply-to-configure, optimizations, bugfixes and plug
 
 # Configuration
 Configuration files are generated when you launch Longship for the first time.  
-They should be located in the `VALHEIM_SERVER/Longship/Configs` directory.
+They should be located in the `VALHEIM_SERVER/BepInEx/config` directory.
 
-`Server.yml`
-```yaml
-# Name of the server
-serverName: Default Server
-# Max players that can connect to the server
-maxPlayers: 10
-# Server password. Note: leave empty if you don't want any password
-serverPassword: ""
-network:
-  # Upload bandwith allowed for the server, it is an easy fix for common lag problems, if you are lagging, you can augment this value.
-  # WARNING: This value WILL allow the server to use more bandwith. So be careful.
-  # Info: The value is in bytes (in this configuration, that means that the server is limited to ~250 Ko/s)
-  dataPerSeconds: 245760
+`gg.mog.valheim.longship.cfg`
+```ini
+## Settings file was created by plugin Longship v0.0.1
+## Plugin GUID: gg.mog.valheim.longship
+
+[Network]
+
+## Upload bandwith allowed for the server, it is an easy fix for common lag problems, if you are lagging, you can augment this value.
+## WARNING: This value WILL allow the server to use more bandwith. So be careful.
+## Info: The value is in bytes (in this configuration, that means that the server is limited to ~250 Ko/s)
+# Setting type: UInt32
+# Default value: 245760
+NetworkDataPerSeconds = 245760
+
+[Server]
+
+## Name of the server
+# Setting type: String
+# Default value: Longship Server
+ServerName = Longship Server
+
+## Port of the server
+# Setting type: Int32
+# Default value: 2456
+ServerPort = 2456
+
+## Max players that can connect to the server
+# Setting type: UInt32
+# Default value: 10
+MaxPlayers = 10
+
+## Server password. Note: leave empty if you don't want any password
+# Setting type: String
+# Default value: 
+ServerPassword = 
 ```
 
 # Plugins
