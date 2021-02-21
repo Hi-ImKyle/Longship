@@ -22,8 +22,8 @@ namespace Longship.Utils
             }
             catch(Exception e)
             {
-                Longship.LogWarning("Can't check if updates are available.");
-                Longship.LogException(e);
+                Longship.Instance.Log.LogError("Can't check if updates are available.");
+                Longship.Instance.Log.LogError(e);
             }
 
             url = null;

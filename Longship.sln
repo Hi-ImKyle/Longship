@@ -1,6 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30907.101
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Longship", "Longship\Longship.csproj", "{CC995724-62A8-4585-84B3-4D384B5D8602}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LongshipEssentials", "LongshipEssentials\LongshipEssentials.csproj", "{C3F9C4A1-E6F4-4C6E-905A-FF016D63EFBF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -12,5 +17,15 @@ Global
 		{CC995724-62A8-4585-84B3-4D384B5D8602}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CC995724-62A8-4585-84B3-4D384B5D8602}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CC995724-62A8-4585-84B3-4D384B5D8602}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3F9C4A1-E6F4-4C6E-905A-FF016D63EFBF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3F9C4A1-E6F4-4C6E-905A-FF016D63EFBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3F9C4A1-E6F4-4C6E-905A-FF016D63EFBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3F9C4A1-E6F4-4C6E-905A-FF016D63EFBF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {458EE379-981D-4C3A-8A8D-DF60073ECF80}
 	EndGlobalSection
 EndGlobal

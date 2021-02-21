@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using Longship.Plugins;
+using UnityEngine.PlayerLoop;
 
 namespace Longship.Managers
 {
     public class CommandsManager : Manager
     {
-        public delegate bool CommandListener(string command, string argument);
+        public delegate bool CommandListener(long sender, string command, string argument);
         private readonly Dictionary<string, CommandListener> _commands = new Dictionary<string, CommandListener>();
         private readonly Dictionary<IPlugin, List<RegisteredListener>> _pluginListeners =
             new Dictionary<IPlugin, List<RegisteredListener>>();
@@ -26,7 +27,7 @@ namespace Longship.Managers
                 _pluginListeners[plugin] = listeners;
             }
 
-            listeners.Add(new RegisteredListener()
+            listeners.Add(new RegisteredListener
             {
                 Listener = listener,
                 Command = command
@@ -34,11 +35,11 @@ namespace Longship.Managers
             _commands[command] = listener;
         }
 
-        public void OnCommandExecuted(string command, string argument)
+        public void OnCommandExecuted(long sender, string command, string argument)
         {
             if (_commands.TryGetValue(command, out var listener))
             {
-                listener.Invoke(command, argument);
+                listener.Invoke(sender, command, argument);
             }
             else
             {

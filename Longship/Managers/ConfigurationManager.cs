@@ -1,7 +1,6 @@
 ﻿using System.IO;
+using BepInEx.Configuration;
 using Longship.Configuration;
-using YamlDotNet.Serialization;
-using YamlDotNet.Serialization.NamingConventions;
 
 namespace Longship.Managers
 {
@@ -9,36 +8,33 @@ namespace Longship.Managers
     {
         private readonly string _configurationDirectory;
         public ServerConfiguration Configuration { get; private set; }
+        public ConfigFile PluginConfigFile { get; private set; }
 
         public ConfigurationManager(string configurationDirectory)
         {
             _configurationDirectory = configurationDirectory;
         }
+
+        public ConfigurationManager(ConfigFile pluginConfigFile)
+        {
+            PluginConfigFile = pluginConfigFile;
+        }
         
         public override void Init()
         {
-            var directory = new DirectoryInfo(_configurationDirectory);
-            if (!directory.Exists)
-            {
-                directory.Create();
-            }
-
-            var configFilePath = Path.Combine(_configurationDirectory, "Server.yml");
-            var configFileInfo = new FileInfo(configFilePath);
-            if (!configFileInfo.Exists)
-            {
-                configFileInfo.Create().Close();
-                var serializer = new SerializerBuilder()
-                    .WithNamingConvention(CamelCaseNamingConvention.Instance)
-                    .Build();
-               File.WriteAllText(configFilePath, serializer.Serialize(new ServerConfiguration()));
-            }
-            
-            var deserializer = new DeserializerBuilder()
-                .WithNamingConvention(CamelCaseNamingConvention.Instance)
-                .Build();
-            Configuration = deserializer.Deserialize<ServerConfiguration>(
-                File.ReadAllText(configFilePath));
+            Configuration = new ServerConfiguration();
+            Configuration.ServerName =
+                PluginConfigFile.Bind("Server", "ServerName", "Longship Server", "Name of the server");
+            Configuration.ServerPort =
+                PluginConfigFile.Bind("Server", "ServerPort",2456 , "Port of the server");
+            Configuration.MaxPlayers =
+                PluginConfigFile.Bind("Server", "MaxPlayers", 10u, "Max players that can connect to the server");
+            Configuration.ServerPassword = PluginConfigFile.Bind("Server", "ServerPassword", "",
+                "Server password. Note: leave empty if you don't want any password");
+            Configuration.NetworkDataPerSeconds =
+                PluginConfigFile.Bind("Network", "NetworkDataPerSeconds", 245760u, "Upload bandwith allowed for the server, it is an easy fix for common lag problems, if you are lagging, you can augment this value.\n" +
+                                                                                   "WARNING: This value WILL allow the server to use more bandwith. So be careful.\n" +
+                                                                                   "Info: The value is in bytes (in this configuration, that means that the server is limited to ~250 Ko/s)");
         }
     }
 }
