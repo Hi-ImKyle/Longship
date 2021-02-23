@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using HarmonyLib;
 using Longship.Events;
+using Longship.Utilities;
 using UnityEngine;
 
 namespace Longship.Patches
@@ -8,8 +9,8 @@ namespace Longship.Patches
     [HarmonyPatch(typeof(Humanoid), "DropItem")]
     public class PatchListenToHumanoidDropItem
     {
-        private static readonly MethodInfo _setupVisEquipment = typeof(Humanoid).GetMethod("SetupVisEquipment",
-            BindingFlags.NonPublic | BindingFlags.Instance);
+        // private static readonly MethodInfo _setupVisEquipment = typeof(Humanoid).GetMethod("SetupVisEquipment",
+            // BindingFlags.NonPublic | BindingFlags.Instance);
         
         // This is an exact copy of the ingame method "DropItem" to provide a reliable way of controlling it later
         static bool Prefix(Humanoid __instance, ref bool __result, Inventory inventory, ItemDrop.ItemData item,
@@ -27,12 +28,14 @@ namespace Longship.Patches
             if (___m_hiddenLeftItem == item)
             {
                 ___m_hiddenLeftItem = null;
-                _setupVisEquipment.Invoke(__instance, new []{ ___m_visEquipment, (object) false });
+                __instance.InvokeMethod("SetupVisEquipment", ___m_visEquipment, false);
+                // _setupVisEquipment.Invoke(__instance, new []{ ___m_visEquipment, (object) false });
             }
             if (___m_hiddenRightItem == item)
             {
                 ___m_hiddenRightItem = null;
-                _setupVisEquipment.Invoke(__instance, new []{ ___m_visEquipment, (object) false });
+                __instance.InvokeMethod("SetupVisEquipment", ___m_visEquipment, false);
+                // _setupVisEquipment.Invoke(__instance, new []{ ___m_visEquipment, (object) false });
             }
             if (amount == item.m_stack)
             {

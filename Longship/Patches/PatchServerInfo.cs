@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Reflection;
 using HarmonyLib;
+using Longship.Utilities;
 
 namespace Longship.Patches
 {
     [HarmonyPatch]
     public class PatchServerInfo
     {
-      private static readonly MethodInfo _getPublicPasswordError = typeof(FejdStartup).GetMethod("GetPublicPasswordError",
-        BindingFlags.NonPublic | BindingFlags.Instance);
-      private static readonly MethodInfo _isPublicPasswordValid = typeof(FejdStartup).GetMethod("IsPublicPasswordValid",
-        BindingFlags.NonPublic | BindingFlags.Instance);
+      // private static readonly MethodInfo _getPublicPasswordError = typeof(FejdStartup).GetMethod("GetPublicPasswordError",
+      //   BindingFlags.NonPublic | BindingFlags.Instance);
+      // private static readonly MethodInfo _isPublicPasswordValid = typeof(FejdStartup).GetMethod("IsPublicPasswordValid",
+      //   BindingFlags.NonPublic | BindingFlags.Instance);
       
       [HarmonyPrefix]
       [HarmonyPatch(typeof(ZNet), "Awake")]
@@ -34,16 +35,11 @@ namespace Longship.Patches
           }
           var createWorld = World.GetCreateWorld(name);
           var password = Longship.Instance.ConfigurationManager.Configuration.ServerPassword.Value;
-          if (!string.IsNullOrEmpty(password) && !(bool) _isPublicPasswordValid.Invoke(__instance,
-            new object[]
-            {
-              password, createWorld
-            }))
+          // if (!string.IsNullOrEmpty(password) && !(bool) _isPublicPasswordValid.Invoke(__instance,
+          if (!string.IsNullOrEmpty(password) && !(bool) __instance.InvokeMethod<bool>("IsPublicPasswordValid", password, createWorld))
           {
-            ZLog.LogError((object) ("Error bad password:" + _getPublicPasswordError.Invoke(__instance, new object[]
-            {
-              password, createWorld
-            })));
+            // ZLog.LogError((object) ("Error bad password:" + _getPublicPasswordError.Invoke(__instance, new object[]
+            ZLog.LogError((object) ("Error bad password:" + __instance.InvokeMethod<string>("GetPublicPasswordError", password, createWorld)));
             UnityEngine.Application.Quit();
             __result = false;
             return false;

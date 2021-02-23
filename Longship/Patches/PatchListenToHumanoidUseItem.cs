@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using HarmonyLib;
 using Longship.Events;
+using Longship.Utilities;
 using UnityEngine;
 
 namespace Longship.Patches
@@ -8,8 +9,8 @@ namespace Longship.Patches
     [HarmonyPatch(typeof(Humanoid), "UseItem")]
     public class PatchListenToHumanoidUseItem
     {
-        private static readonly MethodInfo _toggleEquiped = typeof(Humanoid).GetMethod("ToggleEquiped",
-            BindingFlags.NonPublic | BindingFlags.Instance);
+        // private static readonly MethodInfo _toggleEquiped = typeof(Humanoid).GetMethod("ToggleEquiped",
+        //     BindingFlags.NonPublic | BindingFlags.Instance);
         
         // This is an exact copy of the ingame method "UseItem" to provide a reliable way of controlling it later
         static bool Prefix(Humanoid __instance, Inventory inventory, ItemDrop.ItemData item, bool fromInventoryGui,
@@ -45,8 +46,8 @@ namespace Longship.Patches
                     return false;
                 }
             }
-            else if ((inventory != ___m_inventory ||
-                      !(bool) _toggleEquiped.Invoke(__instance, new []{ item })) && !fromInventoryGui)
+            else if ((inventory != ___m_inventory || !__instance.InvokeMethod<bool>("ToggleEquiped", item)) && !fromInventoryGui)
+            // else if ((inventory != ___m_inventory || !(bool) _toggleEquiped.Invoke(__instance, new []{ item })) && !fromInventoryGui)
             {
                 if (hoverable != null)
                 {
